@@ -43,6 +43,6 @@ class TweetController extends Controller
             ],
         ];
 
-        return view('tweets.index', ['tweets' => $articles]);
+        return view('tweets.index', ['tweets' => $tweets]);
     }
 }
