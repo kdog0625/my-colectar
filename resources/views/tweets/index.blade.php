@@ -3,6 +3,7 @@
 @section('title', '記事一覧')
 
 @section('content')
+  @include('nav') 
   <div class="container">
     @foreach($tweets as $tweet) 
       <div class="card mt-3">
