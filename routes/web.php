@@ -15,6 +15,6 @@
 //     return view('welcome');
 // });
 
-
+Auth::routes();
 //第一引数には、URLを文字列で、第二引数には、どのコントローラーで何のメソッドを実行するのかを文字列で渡す。
 Route::get('/', 'TweetController@index');

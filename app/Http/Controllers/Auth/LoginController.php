@@ -8,6 +8,12 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
+
+    // protected function loggedOut(Request $request)
+    // {
+    //     // ここにやりたい処理内容を書く
+    // }
+
     /*
     |--------------------------------------------------------------------------
     | Login Controller
