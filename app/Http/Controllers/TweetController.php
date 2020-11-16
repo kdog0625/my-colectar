@@ -39,7 +39,28 @@ class TweetController extends Controller
     public function show(Tweet $tweet)
     {
         return view('tweets.show', ['tweet' => $tweet]);
-    }    
+    } 
+    
+    public function like(Request $request, Tweet $tweet)
+    {
+        $tweet->likes()->detach($request->user()->id);
+        $tweet->likes()->attach($request->user()->id);
+
+        return [
+            'id' => $tweet->id,
+            'countLikes' => $tweet->count_likes,
+        ];
+    }
+
+    public function unlike(Request $request, Tweet $tweet)
+    {
+        $tweet->likes()->detach($request->user()->id);
+
+        return [
+            'id' => $tweet->id,
+            'countLikes' => $tweet->count_likes,
+        ];
+    }
 
     //editアクションメソッド内の$tweetにはTweetモデルのインスタンスが代入された状態
     public function edit(Tweet $tweet)

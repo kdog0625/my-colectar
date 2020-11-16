@@ -63,4 +63,15 @@
       {{ $tweet->body }}
     </div>
   </div>
+  <div class="card-body pt-0 pb-2 pl-3">
+    <div class="card-text">
+      <tweet-like
+        :initial-is-liked-by='@json($tweet->isLikedBy(Auth::user()))'      
+        :initial-count-likes='@json($tweet->count_likes)'
+        :authorized='@json(Auth::check())'
+        endpoint="{{ route('tweets.like', ['tweet' => $tweet]) }}"
+      >
+      </tweet-like>
+    </div>
+  </div>
 </div>

@@ -22,3 +22,8 @@ Route::get('/', 'TweetController@index')->name('tweets.index');
 //ログインしていなくてもトップページと詳細ページを見れるように設定
 Route::resource('/tweets', 'TweetController')->except(['index','show'])->middleware('auth');
 Route::resource('/tweets', 'TweetController')->only(['show']); 
+
+Route::prefix('tweets')->name('tweets.')->group(function () {
+  Route::put('/{tweet}/like', 'TweetController@like')->name('like')->middleware('auth');
+  Route::delete('/{tweet}/like', 'TweetController@unlike')->name('unlike')->middleware('auth');
+});
