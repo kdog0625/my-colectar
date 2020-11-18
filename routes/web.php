@@ -27,3 +27,4 @@ Route::prefix('tweets')->name('tweets.')->group(function () {
   Route::put('/{tweet}/like', 'TweetController@like')->name('like')->middleware('auth');
   Route::delete('/{tweet}/like', 'TweetController@unlike')->name('unlike')->middleware('auth');
 });
+Route::get('/tags/{name}', 'TagController@show')->name('tags.show');

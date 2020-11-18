@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Tweet;
 
+use App\Tag;
+
 use App\Http\Requests\TweetRequest;
 
 use Illuminate\Http\Request;
@@ -24,7 +26,13 @@ class TweetController extends Controller
 
     public function create()
     {
-        return view('tweets.create');
+        $allTagNames = Tag::all()->map(function ($tag) {
+            return ['text' => $tag->name];
+        });
+
+        return view('tweets.create', [
+            'allTagNames' => $allTagNames,
+        ]);
     }
     //引数$requestはTweetRequestクラスのインスタンス、storeアクションメソッド内でTweetクラスのインスタンスを生成
     public function store(TweetRequest $request, Tweet $tweet)
@@ -33,6 +41,10 @@ class TweetController extends Controller
         $tweet->body = $request->body;
         $tweet->user_id = $request->user()->id;
         $tweet->save();
+        $request->tags->each(function ($tagName) use ($tweet) {
+            $tag = Tag::firstOrCreate(['name' => $tagName]);
+            $tweet->tags()->attach($tag);
+        });
         return redirect()->route('tweets.index');
     }
 
@@ -66,12 +78,30 @@ class TweetController extends Controller
     public function edit(Tweet $tweet)
     {
       //ビューには'tweet'というキー名で、変数$tweetの値(Tweetモデルのインスタンス)を渡している。これにより変数$tweetにはTweetモデルのインスタンスが代入されたことになる。
-        return view('tweets.edit', ['tweet' => $tweet]);    
+      $tagNames = $tweet->tags->map(function ($tag) {
+        return ['text' => $tag->name];
+    });
+
+    $allTagNames = Tag::all()->map(function ($tag) {
+        return ['text' => $tag->name];
+    });
+
+    return view('tweets.edit', [
+        'tweet' => $tweet,
+        'tagNames' => $tagNames,
+        'allTagNames' => $allTagNames,
+    ]);
     }
 
     public function update(TweetRequest $request, Tweet $tweet)
     {
-        $tweet->fill($request->all())->save();
+        $tweet->title = $request->title;
+        $tweet->body = $request->body;
+        $tweet->tags()->detach();
+        $request->tags->each(function ($tagName) use ($tweet) {
+            $tag = Tag::firstOrCreate(['name' => $tagName]);
+            $tweet->tags()->attach($tag);
+        });
         return redirect()->route('tweets.index');
     }
 
