@@ -19,7 +19,7 @@ class TweetController extends Controller
     //
     public function index()
     {
-      $tweets = Tweet::all()->sortByDesc('created_at');
+      $tweets = Tweet::all()->sortByDesc('created_at') ->load(['user', 'likes', 'tags']); 
 
       return view('tweets.index', ['tweets' => $tweets]);
     }
